@@ -1,32 +1,46 @@
 const express = require("express");
+
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+
+const LoginRoute = require("./src/routes/LoginRoute");
+const routesClientes = require("./src/routes/route-client");
+const LavadorRoute = require('./src/routes/LavadorRoute')
+const SolicitudesRoute = require("./src/routes/SolicitudesRoute");
+
 const app = express();
-
-const { pool } = require("./src/database/pgSetting");
-
 const PORT = process.env.PORT || 3000;
 
-// 1. Setup use - elementos y complementos
+/**
+ * Setup middleware
+ */
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(cors());
+app.use(morgan("combined"));
+
+/**
+ * Endpoint with modules
+ */
+app.use("/api", LoginRoute);
+app.use("/api", routesClientes);
+app.use("/api", LavadorRoute)
+app.use("/api", SolicitudesRoute);
+
 app.use(express.static("public"));
 
-// 3. Definicion API - end-point
-app.get("/api", (req, res) => {
+/**
+ * Endpoint test
+ */
+app.get("/api", (_req, res) => {
     res.send("Api ok");
 });
 
-app.get("/api/clientes", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT * FROM clientes");
-        res.json({
-            count: result.rowCount,
-            clients: result.rows,
-        });
-        pool.end();
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-// End - Ejecutar server
+/**
+ * Listener
+ */
 app.listen(PORT, () => {
     console.log("Servidor corriendo en el puerto: " + PORT);
 });

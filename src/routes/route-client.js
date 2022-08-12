@@ -1,23 +1,27 @@
 const express = require("express");
-const { getClients } = require("../database/queryClient");
 const router = express.Router();
+const queryClientes = require("../database/queryClient");
 
-router.get("/clients", (req, res) => {
-  const result = getClients();
-  if (result.rows) {
-    res.send(result.rows);
-  } else {
-    res.send("Erros en la consulta");
-  }
+router.get("/clientes", async (req, res) => {
+    const result = await queryClientes.getClientes();
+
+    res.json({
+        rowCount: result.rowCount,
+        clientes: result.rows,
+    });
 });
 
-router.get("/lavador/:id", (req, res) => {
-  
+/**
+ * Consulta una cliente en espesifico por id
+ */
+router.get("/cliente/:id", (req, res) => {
+    const result = getClientById();
+    console.log(result);
 });
 
-router.post("/lavador", (req, res) => {
-  const { email, password } = req.query;
-  res.send("Optener lavador: " + email);
+router.post("/cliente", (req, res) => {
+    const { email, password } = req.query;
+    res.send("Optener lavador: " + email);
 });
 
 module.exports = router;

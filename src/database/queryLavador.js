@@ -1,58 +1,51 @@
-const { Pool } = require("pg");
-const pool = new Pool(config);
+const { pool } = require("./pgSetting");
 
 const getLavadores = async () => {
-  try {
-    const res = await pool.query("select * from lavadores");
-    console.log(res);
-    pool.end();
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+    return await pool.query("select * from lavadores");
 };
 
-const insertLavador = async (name, last_name, email, password) => {
-  try {
+const getLavadorPorCredenciales = async (email, password) => {
+    const values = [email, password];
+
+    return await pool.query(
+        "SELECT id, nombre, apellidos, email, roll, status FROM lavadores WHERE email = $1 AND password = $2",
+        values
+    );
+};
+
+/**
+ * Consulta los lavadores por su estado en orde acendente
+ * @param {*} status 
+ * @returns 
+ */
+const getLavadorForState = async (status) => {
+
+    const values = [status];
+    const queryString = "SELECT * FROM lavadores WHERE status = $1 ORDER BY last_status_change ASC";
+
+    return await pool.query(queryString, values)
+}
+
+
+const insertLavador = async (name, last_name, email, password, roll) => {
+    const values = [name, last_name, email, password, roll, false];
     const text =
-      "INSERT INTO lavadores(nombre, apellidos, email, password) VALUES ($1, $2, $3, $4)";
-    const values = [name, last_name, email, password];
+        "INSERT INTO lavadores(nombre, apellidos, email, password, roll, status) VALUES ($1, $2, $3, $4, $5, $6)";
 
-    const res = await pool.query(text, values);
-    console.log(res);
-    pool.end();
-  } catch (e) {
-    console.log();
-  }
+    return await pool.query(text, values);
 };
 
-const deleteLavador = async (id) => {
-  try {
-    const text = "DELETE FROM lavadores WHERE id = $1";
-    const value = [id];
-    const res = await pool.query(text, value);
-    console.log(res);
-  } catch (e) {
-    console.log(e);
-  }
+const updateStateLavador = async (id_lavador, state) => {
+    const values = [state, id_lavador];
+    const text = "UPDATE lavadores SET last_status_change = (SELECT now()), status = $1 WHERE id = $2";
+
+    return await pool.query(text, values);
 };
 
-const updateLavador = async (
-  name,
-  last_name,
-  email,
-  password,
-  idClientToUpdate
-) => {
-  try {
-    const text =
-      "UPDATE lavadores SET nombre = $1, apellidos = $2, email = $3, password = $4 WHERE id = $5";
-    const values = [name, last_name, email, password, idClientToUpdate];
-
-    const res = pool.query(text, values);
-  } catch (e) {
-    console.log(e);
-  }
+module.exports = {
+    getLavadores,
+    getLavadorPorCredenciales,
+    getLavadorForState,
+    insertLavador,
+    updateStateLavador,
 };
-
-module.export { getLavadores, insertLavador, updateLavador, deleteLavador };
