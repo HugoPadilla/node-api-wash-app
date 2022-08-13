@@ -77,12 +77,6 @@ async function closeSession() {
       <RouterLink to="/" class="col drawer__router_link">
         <ItemDrawer label="Inicio" icon="src/assets/icon/icon-menu.svg"/>
       </RouterLink>
-      <RouterLink to="/activity" class="drawer__router_link">
-        <ItemDrawer
-            label="Activida"
-            icon="src/assets/icon/icon-menu.svg"
-        />
-      </RouterLink>
       <ItemDrawer
           @click="closeSession"
           label="Cerrar sesion"

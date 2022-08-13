@@ -13,7 +13,7 @@ const type_user = ref("");
 
 async function register() {
     try {
-        const result = await axios.post("http://localhost:3000/api/signin", {
+        const result = await axios.post("https://washull.herokuapp.com/api/signin", {
             roll: type_user.value,
             user: {
                 name: name.value,
