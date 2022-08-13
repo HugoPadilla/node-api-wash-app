@@ -75,12 +75,11 @@ async function closeSession() {
 
     <nav class="">
       <RouterLink to="/" class="col drawer__router_link">
-        <ItemDrawer label="Inicio" icon="src/assets/icon/icon-menu.svg"/>
+        <ItemDrawer label="Inicio"/>
       </RouterLink>
       <ItemDrawer
           @click="closeSession"
           label="Cerrar sesion"
-          icon="src/assets/icon/icon-arrow-left-circle.svg"
       />
     </nav>
   </div>

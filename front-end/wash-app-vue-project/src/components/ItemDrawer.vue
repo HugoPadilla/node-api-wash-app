@@ -1,16 +1,15 @@
-<script>
-export default {
-    props: {
-        isSelected: false,
-        label: "",
-        icon: "",
-    },
-};
+<script setup>
+
+const props = defineProps({
+  isSelected: false,
+  label: "",
+})
+
+
 </script>
 
 <template>
     <div class="drawer-item drawer-item--selected">
-        <img :src="'/' + icon" alt="" class="drawer-item__icon" />
         <p class="drawer-item__label">{{ label }}</p>
     </div>
 </template>

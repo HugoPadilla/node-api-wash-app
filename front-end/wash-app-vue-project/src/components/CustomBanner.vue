@@ -9,7 +9,7 @@
 <style lang="scss" scoped>
 .banner {
   padding: 5rem 3rem 1rem;
-  background: url("src/assets/banner.png") no-repeat;
+  background: url("../assets/banner.png") no-repeat;
   background-size: cover;
   background-position-y: center;
   color: var(--color-on-primary);
