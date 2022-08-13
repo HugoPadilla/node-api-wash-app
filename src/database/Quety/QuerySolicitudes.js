@@ -20,7 +20,7 @@ const getSolicitudesDelLavador = async (id_lavador) => {
  */
 const getSolicitudesDelCliente = async (idCliente) => {
     const valor = [idCliente];
-    const queryString = "SELECT * FROM solicitudes WHERE id_cliente = $1";
+    const queryString = "SELECT * FROM solicitudes WHERE id_cliente = $1 ORDER BY id ASC";
 
     return await pool.query(queryString, valor);
 };

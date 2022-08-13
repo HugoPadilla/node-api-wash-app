@@ -102,13 +102,13 @@ function navigateToLogin() {
                     <CustomButton
                         @click="register"
                         label="Registrarse"
-                        style="width: 80%"
+                        style="width: 100%"
                     />
 
                      <div class="label-login">
                             <p>
-                                No tienes una cuenta aun?
-                                <span @click="navigateToLogin" >Registrate aqui!</span>
+                                Ya estas registado?
+                                <span @click="navigateToLogin" >Inicia sesion!</span>
                             </p>
                     </div>
                 </form>
@@ -187,6 +187,7 @@ function navigateToLogin() {
                     display: flex;
                     justify-content: center;
                     width: 100%;
+                    margin-top: 1rem;
 
                     p {
                     }

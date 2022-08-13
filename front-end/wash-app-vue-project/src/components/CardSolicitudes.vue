@@ -119,6 +119,7 @@ function showMenuWithAccess() {
     background: var(--color-surface);
     padding: 0 1rem;
     border-radius: .5rem;
+    z-index: 100;
     -webkit-box-shadow: 0 18px 35px -11px rgba(125, 128, 150, 0.51);
     -moz-box-shadow: 0 18px 35px -11px rgba(125, 128, 150, 0.51);
     box-shadow: 0 18px 35px -11px rgba(125, 128, 150, 0.51);

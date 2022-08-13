@@ -10,7 +10,7 @@ export default {
 
 <template>
     <div class="drawer-item drawer-item--selected">
-        <img :src="icon" alt="" class="drawer-item__icon" />
+        <img :src="'/' + icon" alt="" class="drawer-item__icon" />
         <p class="drawer-item__label">{{ label }}</p>
     </div>
 </template>
