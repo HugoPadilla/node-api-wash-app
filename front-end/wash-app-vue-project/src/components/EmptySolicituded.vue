@@ -1,14 +1,11 @@
 <script setup>
 import CustomButton from "./CustomButton.vue";
 import {computed, onMounted} from "vue";
+import {useStore} from "vuex";
 
-const props = defineProps({
-  roll: {
-    type: String,
-    default: "none",
-    required: true
-  }
-})
+const store = useStore()
+
+const currentUser = computed(() => store.state.currentUser)
 
 const infoEmptyWithRoll = computed(() => {
 
@@ -18,7 +15,7 @@ const infoEmptyWithRoll = computed(() => {
     isVisible: false
   }
 
-  switch (props.roll) {
+  switch (currentUser.value.roll) {
     case "cliente":
       info = {
         title: "¡Programa tu primer lavado!",
@@ -38,17 +35,13 @@ const infoEmptyWithRoll = computed(() => {
   return info;
 })
 
-onMounted(() => {
-  console.info(infoEmptyWithRoll)
-})
-
 </script>
 
 <template>
   <div class="empty">
     <img class="empty__image" src="@/assets/images/img-customer.png" alt="Lavar tu auto">
-    <h5 class="empty__title">{{ this.infoEmptyWithRoll.title }}</h5>
-    <p class="empty__text">{{ this.infoEmptyWithRoll.label }}</p>
+    <h5 class="empty__title">{{ infoEmptyWithRoll.title }}</h5>
+    <p class="empty__text">{{ infoEmptyWithRoll.label }}</p>
     <CustomButton v-if="infoEmptyWithRoll.isVisible" @click="$emit('openForm')" class="empty__button"
                   label="Nueva solicitud"/>
   </div>

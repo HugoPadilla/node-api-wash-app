@@ -1,26 +1,24 @@
 <script setup>
-
 import CustomButton from "../CustomButton.vue";
-import Cookies from "js-cookie";
 import axios from "axios";
 import moment from "moment";
-import {computed, ref, } from "vue";
+import {computed, ref,} from "vue";
+import {useStore} from "vuex";
 
-
+const store = useStore()
+const currentUser = computed(() => store.state.currentUser)
 
 const date = ref(moment().format());
-// Variables del formulario
 const fechaLavado = ref(date.value);
 const typeAuto = ref("");
 const placaAuto = ref("");
 
 const isLoading = ref(false);
+const showError = ref(false);
 
 const isDisableButton = computed(() => {
   return fechaLavado.value === "" || typeAuto.value === "" || placaAuto.value === ""
 });
-
-const showError = ref(false)
 
 const emit = defineEmits(["closeDialog"])
 
@@ -28,16 +26,10 @@ async function sendNewSolicitud() {
 
   isLoading.value = true
 
-  console.log(date)
-  console.log(fechaLavado.value)
-
   try {
-    const cookies = Cookies.get("usuario");
-    const currentUser = JSON.parse(cookies);
-
     const data = {
       solicitud: {
-        id_cliente: currentUser.id,
+        id_cliente: currentUser.value.id,
         fecha_creacion: date.value, // Fecha actual
         fecha_lavado: fechaLavado.value, // Fecha del lavado del auto
         type_auto: typeAuto.value, // Info del form
@@ -45,11 +37,11 @@ async function sendNewSolicitud() {
       }
     }
 
-    const result = await axios.post(import.meta.env.VITE_API_ENDPOINT + "solicitudes", data)
+    await axios.post(import.meta.env.VITE_API_ENDPOINT + "solicitudes", data)
     isLoading.value = false;
     showError.value = false
-    await emit("closeDialog")
 
+    await emit("closeDialog")
 
   } catch (e) {
     isLoading.value = false;

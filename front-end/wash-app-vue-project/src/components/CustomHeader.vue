@@ -1,9 +1,17 @@
 <script setup>
 
-const props = defineProps({
-  title: String,
-  subtitle: String
-});
+import {useStore} from "vuex";
+import {computed} from "vue";
+
+const store = useStore()
+
+const currentUser = computed(() => {
+  return store.state.currentUser
+})
+
+function updateName() {
+  store.commit('setNameCurrentUser')
+}
 
 </script>
 
@@ -17,14 +25,15 @@ const props = defineProps({
     />
 
     <div class="custom-header__container-title">
-      <h5>{{ title }}</h5>
-      <h6>{{ subtitle }}</h6>
+      <h5>{{ currentUser.nombre }} - {{currentUser.roll}}</h5>
+      <h6>{{ currentUser.email }}</h6>
     </div>
 
     <img
         class="custom-header__notify"
         src="../assets/icon/icon-bell.png"
         alt=""
+        @click="updateName"
     />
     <img
         clas="custom-header__profile"

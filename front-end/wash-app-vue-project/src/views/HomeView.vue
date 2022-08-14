@@ -8,48 +8,42 @@ import CardSolicitudes from "../components/CardSolicitudes.vue";
 import CustomButton from "../components/CustomButton.vue";
 import NuewSolicitud from "../components/dialog/NuewSolicitud.vue";
 import EmptySolicituded from "../components/EmptySolicituded.vue";
+import {useStore} from "vuex";
 
 const BASE_URL_API = import.meta.env.VITE_API_ENDPOINT;
 
-const currentUser = ref({
-  id: -1,
-  nombre: "",
-  apellidos: "",
-  email: "",
-  roll: ""
-});
+const store = useStore()
+
+const currentUser = computed(() => {
+  return store.state.currentUser
+})
+
 const solicitudes = ref([]);
-const showFormSolicitude = ref(false);
+
+let showFormSolicitude = ref(false);
+
+const isSolicitudeEmpty = computed(() => solicitudes.value.length === 0)
 
 const showButtonNewSolicitude = computed(() => {
-  return currentUser.value.roll === 'cliente' && solicitudes.value.length !== 0;
-})
-const isSolicitudesEmpty = computed(() => {
-  return solicitudes.value.length === 0;
+  return currentUser.value.roll === 'cliente' && !isSolicitudeEmpty.value;
 })
 
 onMounted(() => {
-
-  const cookiesUser = Cookies.get("usuario");
-  currentUser.value = JSON.parse(cookiesUser);
-
   getSolicitudes();
 });
 
 async function getSolicitudes() {
 
-  const cookiesUser = Cookies.get("usuario")
-  const currentUser = JSON.parse(cookiesUser)
-
   solicitudes.value = [];
+
   const result = await axios.get(BASE_URL_API + "solicitudes", {
     params: {
-      id_owner: currentUser.id,
-      roll: currentUser.roll
+      id_owner: currentUser.value.id,
+      roll: currentUser.value.roll
     },
   });
-  solicitudes.value = result.data.solicitudes;
 
+  solicitudes.value = result.data.solicitudes;
 }
 
 /**
@@ -113,9 +107,8 @@ function closeDialog() {
       </div>
 
       <EmptySolicituded
-          v-if="isSolicitudesEmpty"
+          v-if="isSolicitudeEmpty"
           @openForm="showFormSolicitude = true"
-          :roll="currentUser.roll"
       />
     </div>
 

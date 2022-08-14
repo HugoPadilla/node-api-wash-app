@@ -1,43 +1,33 @@
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, ref, watch, watchEffect} from "vue";
 import {RouterLink} from "vue-router";
 import Cookies from "js-cookie";
 import axios from "axios";
 import ItemDrawer from "./ItemDrawer.vue";
 import router from "../router";
+import {useStore} from "vuex";
 
 const checkbox = ref(false);
-const rollCurrentUser = ref("");
 
-onMounted(() => {
-  const cookiesUser = Cookies.get("usuario");
-  const currentUser = JSON.parse(cookiesUser);
+const store = useStore()
+const currentUser = computed(() => {
+  return store.state.currentUser
+})
 
-  checkbox.value = currentUser.status
-  rollCurrentUser.value = currentUser.roll
-});
+watchEffect(() => {
+  checkbox.value = currentUser.value.status
+})
 
-watch(checkbox, (e) => {
-  if(rollCurrentUser.value === "lavador") updateState(checkbox.value)
-});
-
-async function updateState(newState) {
-
+async function updateState() {
   try {
-
-    const cookiesUser = Cookies.get("usuario");
-    const currentUser = JSON.parse(cookiesUser);
-
     const data = {
-      state: newState,
+      state: checkbox.value,
       id_lavador: currentUser.id
     }
 
     const result = await axios.put(import.meta.env.VITE_API_ENDPOINT + "lavador", data)
 
-    currentUser.status = newState;
-    const currentUserString = JSON.stringify(currentUser);
-    Cookies.set("usuario", currentUserString)
+    store.commit("updateRollOfUser", {status: data.state})
 
     console.log(result)
 
@@ -47,9 +37,9 @@ async function updateState(newState) {
 
 }
 
-async function closeSession() {
-  await Cookies.remove('usuario');
-  await router.push('login')
+function closeSession() {
+  store.commit('removeCurrentUser')
+  router.push('login')
 }
 
 </script>
@@ -58,7 +48,7 @@ async function closeSession() {
   <div class="drawer">
     <img class="logo" src="../assets/images/logo.png" alt=""/>
 
-    <div v-if="rollCurrentUser === 'lavador'" class="disponibilidad">
+    <div v-if="currentUser.roll === 'lavador'" class="disponibilidad">
       <div class="disponibilidad-label">
         <h5>Disponibilidad</h5>
         <h6>Establece si estas activos para lavar autos</h6>
@@ -66,6 +56,7 @@ async function closeSession() {
 
       <input
           v-model="checkbox"
+          @change="updateState"
           class="checkbox"
           type="checkbox"
           name=""

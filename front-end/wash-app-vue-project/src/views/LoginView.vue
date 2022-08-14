@@ -1,17 +1,19 @@
 <script setup>
 import axios from "axios";
-import Cookies from "js-cookie";
 import {computed, ref} from "vue";
 import CustomButton from "../components/CustomButton.vue";
 import router from "../router";
+import {useStore} from "vuex";
 
-const email = ref("");
-const password = ref("");
+const store = useStore()
+
+const email = ref("")
+const password = ref("")
 const isError = ref(false)
-const isLoading = ref(false);
+const isLoading = ref(false)
 
 const enableFormWithCredential = computed(() => {
-  return email.value === "" || password.value === "";
+  return email.value === "" || password.value === ""
 })
 
 async function login() {
@@ -34,9 +36,12 @@ async function login() {
 
     console.log(result);
 
-    const clientString = JSON.stringify(result.data.data);
+    const payload = {
+      currentUser: result.data.data
+    }
 
-    Cookies.set("usuario", clientString);
+    store.commit("setCurrentUser", payload)
+
     isLoading.value = false
     await router.push("/");
   } catch (error) {
@@ -94,13 +99,13 @@ function navigateToRegister() {
                 v-model="password"
             />
 
-            <p class="message-error" v-if="isError">* Correo electronico o contraseña incorectas, revisa tu credenciales.</p>
+            <p class="message-error" v-if="isError">* Correo electronico o contraseña incorectas, revisa tu
+              credenciales.</p>
 
             <CustomButton
                 label="Iniciar sesion"
                 :is-loading="isLoading"
                 :is-disable="enableFormWithCredential"
-                @click="login"
                 style="width: 100%"
             />
 

@@ -1,32 +1,18 @@
 <script setup>
 import {RouterView} from "vue-router";
-import {customRef, onMounted, ref} from "vue";
-import Cookies from "js-cookie";
+import {onMounted, ref} from "vue";
 import CustomDrawer from "../components/CustomDrawer.vue";
 import CustomHeader from "../components/CustomHeader.vue";
 
 let isVisible = ref(false);
-const currentUser = ref({});
-
-onMounted(() => {
-  getCurrentUser();
-});
-
-function getCurrentUser() {
-  try {
-    const cookiesUser = Cookies.get("usuario");
-    currentUser.value = JSON.parse(cookiesUser);
-    console.log(currentUser.value)
-  } catch (e) {
-    console.log(e)
-  }
-}
 
 function toggledrawe() {
   isVisible.value = !isVisible.value;
   console.log(isVisible.value);
 }
+
 </script>
+
 <template>
   <div class="wrapper">
     <div
@@ -38,8 +24,7 @@ function toggledrawe() {
 
     <div class="wrapper-main">
       <header class="header">
-        <CustomHeader @toggle="toggledrawe" :title="currentUser.nombre +' - '+ currentUser.roll"
-                      :subtitle="currentUser.email"/>
+        <CustomHeader @toggle="toggledrawe"/>
       </header>
 
       <div class="page">
