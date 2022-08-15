@@ -11,6 +11,8 @@ router.put('/lavador', async (reques, response) => {
 
         const {id_lavador, state} = reques.body;
 
+        if (!id_lavador) return response.status(400).json({status: "error", message: "Solicitud incorrecta"})
+
         const result = await updateStateLavador(id_lavador, state);
 
         console.log(result);
