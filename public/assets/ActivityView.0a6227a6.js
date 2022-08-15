@@ -1,0 +1,1 @@
+import{o as e,c as a,a as t,b as s,C as o}from"./index.c981403a.js";const c={class:"about"},n=s("h1",null,"Paginas de actividad",-1),l={__name:"ActivityView",setup(r){return(_,i)=>(e(),a("div",c,[t(o),n]))}};export{l as default};
