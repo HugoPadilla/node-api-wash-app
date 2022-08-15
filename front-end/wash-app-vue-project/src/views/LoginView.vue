@@ -5,6 +5,8 @@ import CustomButton from "../components/CustomButton.vue";
 import router from "../router";
 import {useStore} from "vuex";
 
+const BASE_URL_API = import.meta.env.VITE_API_ENDPOINT;
+
 const store = useStore()
 
 const email = ref("")
@@ -29,10 +31,7 @@ async function login() {
       },
     };
 
-    const result = await axios.post(
-        "https://washull.herokuapp.com/api/login",
-        body
-    );
+    const result = await axios.post(BASE_URL_API + "login", body);
 
     console.log(result);
 

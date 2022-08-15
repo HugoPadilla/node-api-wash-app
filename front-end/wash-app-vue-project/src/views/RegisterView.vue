@@ -5,6 +5,8 @@ import axios from "axios";
 import router from "../router";
 import CustomButton from "../components/CustomButton.vue";
 
+const BASE_URL_API = import.meta.env.VITE_API_ENDPOINT;
+
 const store = useStore();
 
 const name = ref("");
@@ -32,7 +34,7 @@ async function register() {
   isLoading.value = true
 
   try {
-    const result = await axios.post("https://washull.herokuapp.com/api/signin", {
+    const result = await axios.post(BASE_URL_API + "signin", {
       roll: type_user.value,
       user: {
         name: name.value,

@@ -6,6 +6,7 @@ import axios from "axios";
 import ItemDrawer from "./ItemDrawer.vue";
 import router from "../router";
 import {useStore} from "vuex";
+const BASE_API = import.meta.env.VITE_API_ENDPOINT
 
 const checkbox = ref(false);
 
@@ -22,10 +23,10 @@ async function updateState() {
   try {
     const data = {
       state: checkbox.value,
-      id_lavador: currentUser.id
+      id_lavador: currentUser.value.id
     }
 
-    const result = await axios.put(import.meta.env.VITE_API_ENDPOINT + "lavador", data)
+    const result = await axios.put(BASE_API + "lavador", data)
 
     store.commit("updateRollOfUser", {status: data.state})
 
